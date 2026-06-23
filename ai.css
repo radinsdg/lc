@@ -143,10 +143,9 @@ header p {
 /* ===== دکمه‌های سریع (ثابت در پایین صفحه) ===== */
 .quick-buttons {
     position: fixed;
-    bottom: 0;
+    bottom: 20px;
     left: 0;
     right: 0;
-    z-index: 1000;
     
     display: flex;
     flex-wrap: wrap;
