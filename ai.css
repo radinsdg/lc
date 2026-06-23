@@ -211,11 +211,10 @@ header p {
 
 /* ========== بخش ورودی ========== */
 .input-area {
-    padding: 20px;
-    display: flex;
-    gap: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
+    display: block;
+    position: fixed;
+    text-align: center;
+    bottom: 20px;
 }
 
 input {
