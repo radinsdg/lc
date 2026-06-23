@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
     const chatBox = document.getElementById('chatBox');
     const quickBtns = document.querySelectorAll('.quick-btn');
 
@@ -127,72 +125,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return replaceName(sassyResponses[randomIndex]);
     }
 
-    function handleSend() {
-        const text = userInput.value.trim();
-        
-        if (text !== "" && !isTyping) {
-            addUserMessage(text);
-            userInput.value = '';
+    function handleSend(text) {
+        if (!text || text.trim() === "" || isTyping) return;
 
-            sendBtn.disabled = true;
-            userInput.disabled = true;
-            quickBtns.forEach(btn => btn.disabled = true);
+        const trimmedText = text.trim();
+        addUserMessage(trimmedText);
 
-            if (document.activeElement === userInput) {
-                userInput.blur();
-            }
+        // غیرفعال کردن دکمه‌ها در حین تایپ ربات
+        quickBtns.forEach(btn => btn.disabled = true);
 
-            setTimeout(() => {
-                const botResponse = getBotResponse(text);
-                addAiMessage(botResponse);
-                
-                sendBtn.disabled = false;
-                userInput.disabled = false;
-                quickBtns.forEach(btn => btn.disabled = false);
-            }, 400);
-        }
+        setTimeout(() => {
+            const botResponse = getBotResponse(trimmedText);
+            addAiMessage(botResponse);
+            
+            // فعال کردن مجدد دکمه‌ها
+            quickBtns.forEach(btn => btn.disabled = false);
+        }, 400);
     }
 
-    // ===== رویدادهای دکمه‌های سریع =====
+    // ===== رویدادهای کلیک روی دکمه‌های سریع =====
     quickBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault();
-            
             const question = this.getAttribute('data-question');
-            if (question && !isTyping) {
-                userInput.value = question;
-                
-                if (document.activeElement === userInput) {
-                    userInput.blur();
-                }
-                
-                handleSend();
+            if (question) {
+                handleSend(question);
             }
         });
-    });
-
-    sendBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if (document.activeElement === userInput) {
-            userInput.blur();
-        }
-        handleSend();
-    });
-
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (document.activeElement === userInput) {
-                userInput.blur();
-            }
-            handleSend();
-        }
-    });
-
-    // بستن کیبورد با کلیک بیرون
-    document.addEventListener('touchstart', function(e) {
-        if (e.target !== userInput && document.activeElement === userInput) {
-            userInput.blur();
-        }
     });
 });
