@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff8c00">
+    <title>نظرات</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="radinsdg.png" type="image/png">
+    <link rel="apple-touch-icon" href="radinsdg.png">
+</head>
+<body>
+    <header>نظرات</header>
+    
+    <div class="hlink">
+        <a href="index.html" class="home item">خانه</a>
+        <a href="sign.html" class="sign item">ورود حساب</a>
+        <a href="help.html" class="lmaker item">حمایت از ما</a>
+    </div>
+    <div class="calink">
+        <a href="course.html" class="course item">دوره ها</a>
+        <a href="ai.html" class="ai item">دستیار هوشمند</a>
+    </div>
+    
+    <br><br>
+    
+    <div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+        <div style="background: rgba(0,0,0,0.7); padding: 25px; border-radius: 16px;">
+            <strong style="display: block; text-align: center; margin-bottom: 20px;">نظر خود را بنویسید</strong>
+            
+            <textarea id="commentText" placeholder="نظر خود را اینجا بنویسید..." style="width: 95%; padding: 15px; border-radius: 16px; border: 2px solid #ff8c00; background: rgba(255,255,255,0.1); color: white; font-size: 1.1em; font-family: yekan; min-height: 100px;"></textarea>
+            
+            <button onclick="submitComment()" style="display: block; margin: 15px auto; padding: 12px 40px; background: #ff8c00; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1.1em; font-family: yekan;">ارسال نظر</button>
+        </div>
+        
+        <br>
+        
+        <div id="commentsList" style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px;">
+            <strong style="display: block; text-align: center; margin-bottom: 20px;">نظرات کاربران</strong>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ⭐ این دو خط رو با مقادیر خودت عوض کن
+        // ============================================
+        const BIN_ID = "6a3a1fa1da38895dfeefade8";
+        const API_KEY = "$2a$10$lZd8Wno.e3WZUl8b7kdP8.Cnc3pLlscSn1goMFHTg33ngIEpq0cx2";
+        // ============================================
+
+        async function submitComment() {
+            let comment = document.getElementById('commentText').value.trim();
+            
+            if (comment === '') {
+                alert('لطفاً نظر خود را بنویسید!');
+                return;
+            }
+            
+            let userName = localStorage.getItem('su_name') || 'کاربر ناشناس';
+            
+            try {
+                // دریافت نظرات قبلی
+                let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                let data = await res.json();
+                let comments = data.record.comments || [];
+                
+                // اضافه کردن نظر جدید
+                comments.push({
+                    name: userName,
+                    text: comment,
+                    date: new Date().toLocaleDateString('fa-IR'),
+                    time: new Date().toLocaleTimeString('fa-IR')
+                });
+                
+                // ذخیره در JSONBin
+                await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ comments: comments })
+                });
+                
+                document.getElementById('commentText').value = '';
+                displayComments();
+                alert('نظر شما با موفقیت ثبت شد! ✅');
+            } catch(e) {
+                alert('خطا در ثبت نظر! لطفاً دوباره تلاش کنید.');
+                console.error(e);
+            }
+        }
+
+        async function displayComments() {
+            const commentsDiv = document.getElementById('commentsList');
+            
+            try {
+                let res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                    headers: { 'X-Master-Key': API_KEY }
+                });
+                let data = await res.json();
+                let comments = data.record.comments || [];
+                
+                let html = '<strong style="display:block;text-align:center;margin-bottom:20px;">نظرات کاربران</strong>';
+                
+                if (comments.length === 0) {
+                    html += `<p style="text-align:center;color:#aaa;">هنوز نظری ثبت نشده است</p>`;
+                } else {
+                    comments.slice().reverse().forEach(c => {
+                        html += `
+                            <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:12px;margin:10px 0;border-right:4px solid #ff8c00;">
+                                <strong style="color:gold;">${c.name}</strong>
+                                <span style="color:#aaa;font-size:0.8em;"> - ${c.date} ${c.time || ''}</span>
+                                <p style="margin:0;padding:10px 0;">${c.text}</p>
+                            </div>
+                        `;
+                    });
+                }
+                commentsDiv.innerHTML = html;
+            } catch(e) {
+                commentsDiv.innerHTML = `
+                    <strong style="display:block;text-align:center;margin-bottom:20px;">نظرات کاربران</strong>
+                    <p style="text-align:center;color:red;">خطا در دریافت نظرات</p>
+                    <p style="text-align:center;color:#888;font-size:0.8em;">مشکل در ارتباط با سرور</p>
+                `;
+                console.error(e);
+            }
+        }
+
+        window.onload = displayComments;
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff8c00">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="radinsdg.png" type="image/png">
+    <link rel="apple-touch-icon" href="radinsdg.png">
+    <title>دوره ها</title>
+</head>
+<body class="item">
+    <header>دوره ها</header>
+    <br>
+    <div class="link">
+        <details class="psitionmenu">
+            <summary class="cmenu">دوره های من</summary>
+            <div class="mpotions">
+                <a href="my-courses.html" class="m1a">برای مشاهده دوره هایتان ، کلیک کنید</a>
+            </div>
+        </details>
+        <a class="ct" href="https://web.bale.ai/@artinhdg">CT</a>
+        <a class="com" href="comments.html">نظرات</a>
+        <div class="hlink">
+            <a href="index.html" class="home item">خانه</a>
+            <a href="sign.html" class="sign item">ورود حساب</a>
+            <a href="help.html" class="lmaker item">حمایت از ما</a>
+        </div>
+        <div class="calink">
+            <a href="course.html" class="course item">دوره ها</a>
+            <a href="ai.html" class="ai item">دستیار هوشمند</a>
+        </div>
+    </div> 
+    <br>
+    <div class="courselist item">
+        <strong class="item">دوره های موجود</strong>
+        <h3>برای مشاهده بر روی تصویر کلیک کنید</h3>
+        
+        <!-- دوره 1 -->
+        <div class="course-item" style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px; margin: 20px 0;">
+            <p class="python item">شروع برنامه نویسی (مقدماتی)</p>
+            <a href="intro_prog.html"><img src="intro_prog.jpg" width="80%" height="auto" class="ilink" alt="دوره مقدماتی برنامه نویسی"></a>
+            <p>
+                نوع : رایگان<br>
+                پیشنیاز : ندارد<br>
+                تعداد قسمت ها : ۷ قسمت<br>
+                دروس : توضیح های اولیه و برنامه نویسی<br>
+                زبان : مبانی و بخش های اولیه پایتون ۳<br>
+                مقدار آموزش : مبانی<br>
+                مدرس : رادین سرلک<br>
+                وسایل مورد نیاز : یک موبایل هوشمند یا کامپیوتر ساده<br>
+                اپلیکیشن مورد نیاز :<br>
+                برای اندروید :  pydroid 3 ، برای کامپیوتر : thonny یا vscode
+                <br>پیشنهاد برای : مبتدی ها و تازه کار ها<br>
+                دوره بعدی که باید ببینید : دوره پیشرفته پایتون ۳            
+            </p>
+            <button onclick="saveCourse('شروع برنامه نویسی (مقدماتی)', 'intro_prog.html', 'دوره مقدماتی آموزش پایتون')" 
+                    style="display: inline-block; margin: 10px; padding: 12px 30px; background: #ff6b6b; color: white; border: none; border-radius: 30px; cursor: pointer; font-size: 1.1em; font-family: yekan;">
+                ➕ افزودن به دوره های من
+            </button>
+        </div>
+        <hr>
+    </div>
+
+    <script>
+        // تابع ذخیره دوره در localStorage
+        function saveCourse(title, link, description) {
+            // دریافت لیست دوره‌های ذخیره شده
+            let savedCourses = JSON.parse(localStorage.getItem('myCourses') || '[]');
+            
+            // بررسی تکراری نبودن دوره
+            const exists = savedCourses.some(course => course.title === title);
+            if (exists) {
+                alert('این دوره قبلاً به لیست شما اضافه شده است!');
+                return;
+            }
+
+            // اضافه کردن دوره جدید
+            savedCourses.push({
+                title: title,
+                link: link,
+                description: description || 'توضیحی برای این دوره ثبت نشده است'
+            });
+
+            // ذخیره در localStorage
+            localStorage.setItem('myCourses', JSON.stringify(savedCourses));
+            alert('دوره با موفقیت به لیست "دوره های من" اضافه شد! ✅');
+        }
+    </script>
+    
+    <script src="search.js"></script>    
+</body>
+</html>

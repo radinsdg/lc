@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff8c00">
+    <title>پروفایل کاربری</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="radinsdg.png" type="image/png">
+    <link rel="apple-touch-icon" href="radinsdg.png">
+</head>
+<body>
+    <header>پروفایل کاربری</header>
+    <a class="com" href="comments.html">نظرات</a>
+    <div class="hlink">
+        <a href="index.html" class="home item">خانه</a>
+        <a href="sign.html" class="sign item" id="authBtn">ورود حساب</a>
+        <a href="help.html" class="lmaker item">حمایت از ما</a>
+    </div>
+    <div class="calink">
+        <a href="course.html" class="course item">دوره ها</a>
+        <a href="ai.html" class="ai item">دستیار هوشمند</a>
+    </div>
+    
+    <br><br>
+    
+    <div id="profileInfo" style="max-width: 600px; margin: 0 auto; background: rgba(0,0,0,0.7); padding: 30px; border-radius: 16px; text-align: center;">
+        <!-- اطلاعات کاربر اینجا نمایش داده می‌شود -->
+    </div>
+
+    <script>
+        // نمایش اطلاعات کاربر
+        function displayProfile() {
+            const profileDiv = document.getElementById('profileInfo');
+            
+            if (localStorage.getItem('signedUp') === "true") {
+                let userName = localStorage.getItem('su_name') || 'کاربر';
+                let userUsername = localStorage.getItem('su_user') || 'نامشخص';
+                let userCourses = JSON.parse(localStorage.getItem('myCourses') || '[]');
+                
+                profileDiv.innerHTML = `
+                    <strong style="font-size: 2em; color: gold;">${userName}</strong>
+                    <p style="background: none; padding: 10px;">
+                        <strong style="font-size: 1.5em;">نام کاربری:</strong> ${userUsername}<br><br>
+                        <strong style="font-size: 1.5em;">تعداد دوره‌های ذخیره شده:</strong> ${userCourses.length} دوره
+                    </p>
+                    <div style="margin-top: 20px;">
+                        <a href="my-courses.html" style="display: inline-block; margin: 5px; padding: 12px 30px; background: #ff6b6b; color: white; text-decoration: none; border-radius: 30px;">مشاهده دوره‌های من</a>
+                        <button onclick="logout()" style="display: inline-block; margin: 5px; padding: 12px 30px; background: red; color: white; border: none; border-radius: 30px; cursor: pointer;">خروج از حساب</button>
+                    </div>
+                `;
+            } else {
+                profileDiv.innerHTML = `
+                    <p style="font-size: 1.3em; background: rgba(0,0,0,0.5); padding: 20px; border-radius: 16px;">
+                        شما وارد حساب خود نشده‌اید<br>
+                        <a href="sign.html" style="display: inline-block; margin-top: 15px; padding: 12px 30px; background: orange; color: white; text-decoration: none; border-radius: 30px;">ورود / ثبت‌نام</a>
+                    </p>
+                `;
+            }
+        }
+
+        // تابع خروج
+        function logout() {
+            localStorage.removeItem('signedUp');
+            localStorage.removeItem('su_name');
+            localStorage.removeItem('su_user');
+            alert('با موفقیت خارج شدید!');
+            location.reload();
+        }
+
+        window.onload = displayProfile;
+    </script>
+</body>
+</html>
