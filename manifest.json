@@ -1,7 +1,7 @@
 {
-  "name": "Radinsdg",
-  "short_name": "RG",
-  "description": "Radinsdg LC",
+  "name": "Radinsdg Learn Code",
+  "short_name": "Radinsdg LC",
+  "description": "Radinsdg Learn Code website",
   "start_url": "/lc/index.html",
   "display": "standalone",
   "background_color": "#000000",
